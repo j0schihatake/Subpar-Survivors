@@ -258,6 +258,7 @@ function offerORGMAmmo(test,player,ammoName)
 end
 
 function OfferWeapon(test,player)
+	getSpecificPlayer(0):Say("SuperSurvivorOfferWeapon")
 	local SS = SSM:Get(player:getModData().ID)
 	getSpecificPlayer(0):Say(getText("ContextMenu_SD_TakeMyWeapon"))	
 	local task = SS:getTaskManager():getTaskFromName("Listen")
@@ -402,6 +403,8 @@ function OfferArmor(test,SS,item)
 end
 
 function SwapWeaponsSurvivor(test,SS, Type)
+
+	getSpecificPlayer(0):Say("SuperSurvivorsContextMenu:SwapWeaponsSurvivor")
 	
 	local player = SS:Get()
 	local PP = getSpecificPlayer(0):getPrimaryHandItem();
@@ -409,7 +412,7 @@ function SwapWeaponsSurvivor(test,SS, Type)
 	
 	local toPlayer 
 	
-	if(Type == "Gun") then 
+	if(Type == "Gun") then
 		toPlayer = SS.LastGunUsed
 		SS:setGunWep(PP)
 	else 
@@ -457,10 +460,14 @@ function SwapWeaponsSurvivor(test,SS, Type)
 end
 
 function ForceWeaponType(test,SS,useMele)
-	
+	local ASuperSurvivor = SSM:Get(SS.player:getModData().ID)
 	if(not useMele) then
+		ASuperSurvivor:Speak("Ok, i will use only melee.")
+		ASuperSurvivor:setUseGunWeapon(false)
 		SS:reEquipMele()
 	else
+		ASuperSurvivor:Speak("Ok, i will use gun and sometimes melee.")
+		ASuperSurvivor:setUseGunWeapon(true)
 		SS:reEquipGun()
 	end
 
@@ -567,10 +574,9 @@ function survivorMenu(context,o)
 							--tooltipText = "Give your "..getSpecificPlayer(0):getPrimaryHandItem():getDisplayName() .. " to this Survivor to be his Gun type Weapon"
 						else 
 							Label = getText("ContextMenu_SD_SwapGuns") 
-							--tooltipText = "Trade your "..getSpecificPlayer(0):getPrimaryHandItem():getDisplayName().." with ".. o:getForname().."\'s ".. SurvivorWeaponName						
+							--tooltipText = "Trade your "..getSpecificPlayer(0):getPrimaryHandItem():getDisplayName().." with ".. o:getForname().."\'s ".. SurvivorWeaponName
 						end
 						swapweaponsOption = submenu:addOption(Label, nil, SwapWeaponsSurvivor, SS, "Gun");
-					
 					else
 						
 						if SS.LastMeleUsed == nil then 
@@ -863,13 +869,18 @@ end
 
 function SetMeleOrGun(test,value)
 	local mySS = SSM:Get(0)
-	if(mySS:getGroupID() ~= nil) then 
-	
+	if(mySS:getGroupID() ~= nil) then
+
+		--local ASuperSurvivor = SSM:Get(player:getModData().ID)
+		--ASuperSurvivor:Speak(tostring("SuperSurvivorsContextMenu:"))
+
 		local myGroup = SSGM:Get(mySS:getGroupID())
 		if(myGroup) then 
-			if(value == "gun") then 
+			if(value == "gun") then
+				mySS:Get():setUseGunWeapon(true)
 				mySS:Get():Say(getText("ContextMenu_SD_EveryOneUseGun"))
 			else
+				mySS:Get():setUseGunWeapon(false)
 				mySS:Get():Say(getText("ContextMenu_SD_EveryOneUseMele"))
 			end
 			myGroup:UseWeaponType(value) 

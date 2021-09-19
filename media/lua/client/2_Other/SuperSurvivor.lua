@@ -1,6 +1,7 @@
 
 SuperSurvivor = {}
 SuperSurvivor.__index = SuperSurvivor
+SuperSurvivor.useGunWeapon = false
 
 SurvivorVisionCone = 0.90
 
@@ -259,6 +260,7 @@ function SuperSurvivor:newSet(player)
 	
 	return o
 end
+
 function SuperSurvivor:Wait(ticks)
  self.WaitTicks = ticks
 end
@@ -285,6 +287,14 @@ function SuperSurvivor:getBaseCenter()
 		end
 	end
 	return nil
+end
+
+function SuperSurvivor:getUseGunWeapon()
+	return self.useGunWeapon
+end
+
+function SuperSurvivor:setUseGunWeapon(use)
+	self.useGunWeapon = use
 end
 
 
@@ -396,6 +406,7 @@ function SuperSurvivor:getSpokeTo(playerID)
 
 end
 
+-- перезагрузка персонажа
 function SuperSurvivor:reload()
 	local cs = self.player:getCurrentSquare()
 	local id = self:getID()
@@ -440,6 +451,7 @@ function SuperSurvivor:loadPlayer(square, ID)
 
 end
 
+--  надень это
 function SuperSurvivor:WearThis(ClothingItemName) -- should already be in inventory
 
 	local ClothingItem
@@ -694,9 +706,11 @@ end
 function SuperSurvivor:getCurrentTask()
 	return self:getTaskManager():getCurrentTask()
 end
+
+-- слишком напуган чтобы драться
 function SuperSurvivor:isTooScaredToFight()
 	
-	if (self.EnemiesOnMe >= 3) then
+	if (self.EnemiesOnMe >= 5) then
 		return true
 	elseif (self.dangerSeenCount > 0 and (self:HasMultipleInjury() or not self:hasWeapon())) then 
 		return true
@@ -712,6 +726,7 @@ function SuperSurvivor:isTooScaredToFight()
 		
 	end
 end
+-- использовать пушку
 function SuperSurvivor:usingGun()
 	local handItem = self.player:getPrimaryHandItem()
 	if(handItem ~= nil) and (instanceof(handItem,"HandWeapon")) then
@@ -719,6 +734,7 @@ function SuperSurvivor:usingGun()
 	end
 	return false
 end
+
 function SuperSurvivor:isWalkingPermitted()
 	return self.WalkingPermitted
 end
@@ -1189,6 +1205,7 @@ function SuperSurvivor:isEnemy(character)
 
 end
 
+-- имеет оружие
 function SuperSurvivor:hasWeapon()
 
 	if(self.player:getPrimaryHandItem() ~= nil) and (instanceof(self.player:getPrimaryHandItem(),"HandWeapon")) then
@@ -1199,6 +1216,7 @@ function SuperSurvivor:hasWeapon()
 
 end
 
+-- имеет ствол
 function SuperSurvivor:hasGun()
 
 	if(self.player:getPrimaryHandItem() ~= nil) and (instanceof(self.player:getPrimaryHandItem(),"HandWeapon")) and (self.player:getPrimaryHandItem():isAimedFirearm()) then return true 
@@ -1253,6 +1271,8 @@ end
 function SuperSurvivor:getSeenCount()
 	return self.seenCount
 end
+
+-- количество замеченных опасностей
 function SuperSurvivor:getDangerSeenCount()
 	return self.dangerSeenCount
 end
@@ -1281,6 +1301,7 @@ function SuperSurvivor:isInSameBuilding(movingObj)
 	return false 
 end
 
+-- диапазон атаки
 function SuperSurvivor:getAttackRange()
 			 
 	return self.AttackRange 
@@ -1592,7 +1613,7 @@ function SuperSurvivor:NPCcalculateInjurySpeed(bodypart,b)
 	local deepWoundSpeedModifier = bodypart:getDeepWoundSpeedModifier();
 	local n = 0.0;
 	if ((bodypart:getType() == "Foot_L" or bodypart:getType() == "Foot_R") and (bodypart:getBurnTime() > 5.0 or bodypart:getBiteTime() > 0.0 or bodypart:deepWounded() or bodypart:isSplint() or bodypart:getFractureTime() > 0.0 or bodypart:haveGlass())) then
-		n = 1.0f
+		n = 1.0;
 		if (bodypart:bandaged()) then
 			n = 0.7;
 		end
@@ -2186,6 +2207,7 @@ function SuperSurvivor:startReload()
 
 end
 
+-- оружие готово
 function SuperSurvivor:ReadyGun(weapon)
 
 	if(not weapon) or (not weapon:isAimedFirearm()) then return true end
@@ -2475,6 +2497,7 @@ function SuperSurvivor:FindAndReturnCount(thisType)
 	
 end
 
+-- оружие готово
 function SuperSurvivor:WeaponReady()
 	--print("WeaponReady " .. self:getName())
 	local primary = self.player:getPrimaryHandItem()
@@ -2592,6 +2615,8 @@ function SuperSurvivor:hasAmmoForPrevGun()
 	
 	return false
 end
+
+-- переэкиперовать стрелковое оружие:
 function SuperSurvivor:reEquipGun()
 	
 	if(self.LastGunUsed == nil) then return false end
@@ -2602,6 +2627,8 @@ function SuperSurvivor:reEquipGun()
 	return true
 	
 end
+
+-- переэкиперовать оружие ближнего боя:
 function SuperSurvivor:reEquipMele()
 	
 	if(self.LastMeleUsed == nil) then return false end
@@ -2613,6 +2640,7 @@ function SuperSurvivor:reEquipMele()
 	
 end
 
+-- использовать оружие ближнего боя:
 function SuperSurvivor:setMeleWep(handWeapon)
 
 	self:Get():getModData().meleWeapon = handWeapon:getType()
@@ -2621,6 +2649,7 @@ function SuperSurvivor:setMeleWep(handWeapon)
 	
 end
 
+-- использовать
 function SuperSurvivor:setGunWep(handWeapon)
 
 	self:Get():getModData().gunWeapon = handWeapon:getType()

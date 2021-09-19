@@ -4,7 +4,7 @@ function AIManager(TaskMangerIn)
 	local ASuperSurvivor = TaskMangerIn.parent	
 	if(ASuperSurvivor.DebugMode) then print(ASuperSurvivor:getName().." "..ASuperSurvivor:getAIMode() .. " AIManager1 " .. TaskMangerIn:getCurrentTask()) end
 	
-	if(ASuperSurvivor:needToFollow()) or (ASuperSurvivor:Get():getVehicle() ~= nil) then return TaskMangerIn end
+	if(ASuperSurvivor:needToFollow() and ASuperSurvivor.EnemiesOnMe > 3) or (ASuperSurvivor:Get():getVehicle() ~= nil) then return TaskMangerIn end
 	
 	if (TaskMangerIn == nil) or (ASuperSurvivor == nil) then 
 		print("error TaskMangerIn or ASuperSurvivor was nil")

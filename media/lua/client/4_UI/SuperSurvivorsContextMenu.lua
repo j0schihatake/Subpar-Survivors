@@ -404,7 +404,7 @@ end
 
 function SwapWeaponsSurvivor(test,SS, Type)
 
-	getSpecificPlayer(0):Say("SuperSurvivorsContextMenu:SwapWeaponsSurvivor")
+	--getSpecificPlayer(0):Say("SuperSurvivorsContextMenu:SwapWeaponsSurvivor")
 	
 	local player = SS:Get()
 	local PP = getSpecificPlayer(0):getPrimaryHandItem();

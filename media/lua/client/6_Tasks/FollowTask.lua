@@ -52,7 +52,7 @@ end
 
 function FollowTask:needToFollow()
 	local distance = getDistanceBetween(self.parent.player,self.FollowChar)
-	if self.parent == nil or self.FollowChar == nil or self.FollowChar:getCurrentSquare() == nil then return false end
+	if self.parent == nil or self.FollowChar == nil or self.FollowChar:getCurrentSquare() == nil or self.parent.EnemiesOnMe < 3 then return false end
 		if (distance > GFollowDistance+self.FollowDistanceOffset) or (self.parent:getBuilding() ~= self.FollowChar:getCurrentSquare():getBuilding()) or self.parent:Get():getVehicle() or (self.FollowChar:getVehicle() ~= self.parent:Get():getVehicle() ) then 
 		--print(self.parent:getName().." needs to follow");
 		return true

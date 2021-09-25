@@ -1,6 +1,7 @@
 FleeTask = {}
 FleeTask.__index = FleeTask
 
+--Задача бежать:
 function FleeTask:new(superSurvivor)
 
 	local o = {}

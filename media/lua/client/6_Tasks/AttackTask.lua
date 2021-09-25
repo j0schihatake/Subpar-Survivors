@@ -42,7 +42,7 @@ function AttackTask:update()
 	elseif(self.parent.player:IsAttackRange(self.parent.LastEnemeySeen:getX(),self.parent.LastEnemeySeen:getY(),self.parent.LastEnemeySeen:getZ())) or (theDistance < 0.65 )then
 			--print(self.parent:getName().. " int attack range !" )
 			local weapon = self.parent.player:getPrimaryHandItem()
-			if(not weapon or (not self.parent:usingGun()) or ISReloadWeaponAction.canShoot(weapon))  then
+			if(not weapon or (not self.parent:usingGun()) or ISReloadWeaponAction.canShoot(weapon) and not self.parent:getUseGunWeapon())  then
 				--print(self.parent:getName().. " can shoot/attack " )
 				self.parent:Attack(self.parent.LastEnemeySeen) 			
 			elseif(self.parent:usingGun()) then
